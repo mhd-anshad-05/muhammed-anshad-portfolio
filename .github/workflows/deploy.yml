@@ -13,10 +13,9 @@ jobs:
       - name: Deploy to Termux via Cloudflare Tunnel
         uses: zgunz42/cloudflared-scp-action@v1.2.1
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST }}      # ssh.kunjidev.shop
           username: ${{ secrets.SSH_USER }}
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 8022
-          # This copies your website files to the Nginx folder
+          port: 443                          # CHANGE THIS TO 443
           from: "./*"
           to: "/data/data/com.termux/files/usr/share/nginx/html/"
