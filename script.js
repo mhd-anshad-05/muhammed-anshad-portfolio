@@ -89,8 +89,39 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initTypingEffect();
     initScrollAnimations();
+    initServerMonitoring();
     setCurrentYear();
 });
+
+// Simple Server Monitoring
+function initServerMonitoring() {
+    const startTime = Date.now();
+    let requestCount = parseInt(localStorage.getItem('requestCount') || '0') + 1;
+    localStorage.setItem('requestCount', requestCount.toString());
+    
+    function updateServerStats() {
+        const uptime = Date.now() - startTime;
+        const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((uptime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
+        
+        const uptimeString = days > 0 ? `${days}d ${hours}h ${minutes}m` : 
+                           hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+        
+        // Update any server stats displays
+        const serverStatusElements = document.querySelectorAll('#server-status');
+        serverStatusElements.forEach(el => {
+            el.textContent = 'Online';
+            el.style.color = 'var(--success)';
+        });
+        
+        // You can add more stats here if needed
+        console.log(`Server Stats - Uptime: ${uptimeString}, Requests: ${requestCount}`);
+    }
+    
+    updateServerStats();
+    setInterval(updateServerStats, 60000); // Update every minute
+}
 
 // Load Projects
 function loadProjects() {
@@ -111,10 +142,62 @@ function loadProjects() {
     `).join('');
 }
 
-// Show project details (simple alert - can be customized)
+// Show project details with better modal
 function showProjectDetails(id) {
     const project = projects.find(p => p.id === id);
-    alert(`${project.title}\n\n${project.details}`);
+    
+    // Create a better modal instead of alert
+    const modalHTML = `
+        <div class="project-modal" id="projectModal">
+            <div class="project-modal-content">
+                <div class="project-modal-header">
+                    <h3>${project.title}</h3>
+                    <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+                </div>
+                <div class="project-modal-body">
+                    <div class="project-icon-large">
+                        <i class="fas ${project.icon}"></i>
+                    </div>
+                    <p>${project.details}</p>
+                    <div class="project-tags-modal">
+                        ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="project-actions">
+                        <button class="btn btn-primary" onclick="openRelatedPdf('${project.title}')">
+                            <i class="fas fa-file-pdf"></i> View Documentation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProjectModal() {
+    const modal = document.getElementById('projectModal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+}
+
+function openRelatedPdf(projectTitle) {
+    // Map project titles to PDF filenames
+    const pdfMap = {
+        "Highly Available Web Application on AWS": "highly-available-web-app.pdf",
+        "AWS EC2 Management Using CLI": "ec2-cli-management.pdf",
+        "Website Deployment with Database on AWS Linux": "website-database-deployment.pdf",
+        "Static Website Hosting on AWS S3": "s3-static-hosting.pdf"
+    };
+    
+    const filename = pdfMap[projectTitle];
+    if (filename) {
+        closeProjectModal();
+        openPdf(filename, projectTitle + " - Documentation");
+    }
 }
 
 // Load Documentation
@@ -134,26 +217,76 @@ function loadDocumentation() {
     `).join('');
 }
 
-// PDF Viewer
+// PDF Viewer with Skeleton Screen
 function openPdf(filename, title) {
     const modal = document.getElementById('pdfModal');
     const viewer = document.getElementById('pdfViewer');
     const titleElement = document.getElementById('pdfTitle');
     
-    // Set the PDF source - adjust the path based on your folder structure
-    viewer.src = `pdfs/${filename}`;
     titleElement.textContent = title;
-    
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    
+    // Show skeleton screen
+    showPdfSkeleton();
+    
+    // Load PDF after a short delay to show skeleton
+    setTimeout(() => {
+        viewer.src = `pdfs/${filename}`;
+        
+        // Hide skeleton when PDF loads
+        viewer.onload = () => {
+            hidePdfSkeleton();
+        };
+        
+        // Fallback to hide skeleton after 3 seconds
+        setTimeout(() => {
+            hidePdfSkeleton();
+        }, 3000);
+    }, 500);
+}
+
+function showPdfSkeleton() {
+    const viewer = document.getElementById('pdfViewer');
+    const skeletonHTML = `
+        <div class="pdf-skeleton">
+            <div class="skeleton skeleton-header"></div>
+            <div class="skeleton skeleton-content"></div>
+            <div class="skeleton skeleton-footer"></div>
+            <div class="loading-text">
+                <div class="loading-spinner"></div>
+                Loading document...
+            </div>
+        </div>
+    `;
+    
+    viewer.style.display = 'none';
+    viewer.insertAdjacentHTML('afterend', skeletonHTML);
+}
+
+function hidePdfSkeleton() {
+    const skeleton = document.querySelector('.pdf-skeleton');
+    const viewer = document.getElementById('pdfViewer');
+    
+    if (skeleton) {
+        skeleton.remove();
+    }
+    viewer.style.display = 'block';
 }
 
 function closePdfModal() {
     const modal = document.getElementById('pdfModal');
     const viewer = document.getElementById('pdfViewer');
+    const skeleton = document.querySelector('.pdf-skeleton');
     
     modal.classList.remove('active');
     viewer.src = '';
+    viewer.style.display = 'block';
+    
+    if (skeleton) {
+        skeleton.remove();
+    }
+    
     document.body.style.overflow = '';
 }
 
@@ -216,15 +349,23 @@ function initNavigation() {
         });
     });
     
-    // Mobile toggle
-    toggle.addEventListener('click', () => {
-        menu.classList.toggle('active');
-    });
+    // Mobile toggle (only if toggle exists)
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            toggle.classList.toggle('active');
+        });
+    }
     
     // Close mobile menu on link click
     links.forEach(link => {
         link.addEventListener('click', () => {
-            menu.classList.remove('active');
+            if (menu) {
+                menu.classList.remove('active');
+            }
+            if (toggle) {
+                toggle.classList.remove('active');
+            }
         });
     });
 }
@@ -281,38 +422,14 @@ function initScrollAnimations() {
         });
     }, { threshold: 0.1 });
     
-    // Observe elements
-    document.querySelectorAll('.project-card, .skill-category, .doc-card, .contact-item, .stat-card').forEach(el => {
+    // Observe elements (removed contact-item since contact section was removed)
+    document.querySelectorAll('.project-card, .skill-category, .doc-card, .stat-card').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'all 0.6s ease';
         observer.observe(el);
     });
 }
-
-// Contact Form
-document.getElementById('contactForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const btn = e.target.querySelector('button');
-    const originalText = btn.innerHTML;
-    
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    btn.disabled = true;
-    
-    // Simulate sending (replace with actual form handling)
-    setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-        btn.style.background = '#10b981';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            btn.style.background = '';
-            e.target.reset();
-        }, 3000);
-    }, 1500);
-});
 
 // Set current year in footer
 function setCurrentYear() {

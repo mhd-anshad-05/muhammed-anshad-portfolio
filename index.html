@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,14 +28,17 @@
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#projects" class="nav-link">Projects</a>
                 <a href="#skills" class="nav-link">Skills</a>
-                <a href="#infrastructure" class="nav-link">Infrastructure</a>
                 <a href="#documentation" class="nav-link">Documentation</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#infrastructure" class="nav-link">Infrastructure</a>
                 
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
             
             <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
@@ -63,8 +66,8 @@
                         <a href="#projects" class="btn btn-primary">
                             <i class="fas fa-folder-open"></i> View Projects
                         </a>
-                        <a href="#contact" class="btn btn-secondary">
-                            <i class="fas fa-envelope"></i> Get In Touch
+                        <a href="#documentation" class="btn btn-secondary">
+                            <i class="fas fa-file-alt"></i> Documentation
                         </a>
                     </div>
                     <div class="hero-socials">
@@ -133,54 +136,69 @@
                 <div class="skill-category">
                     <h3><i class="fas fa-cloud"></i> Cloud Platforms</h3>
                     <div class="skill-items">
-                        <span class="skill-tag">Amazon Web Services (AWS)</span>
-                        <span class="skill-tag">Microsoft Azure</span>
-                        <span class="skill-tag">EC2</span>
-                        <span class="skill-tag">S3</span>
-                        <span class="skill-tag">RDS</span>
-                        <span class="skill-tag">Auto Scaling</span>
+                        <span class="skill-tag"><span>Amazon Web Services (AWS)</span></span>
+                        <span class="skill-tag"><span>Microsoft Azure</span></span>
+                        <span class="skill-tag"><span>EC2</span></span>
+                        <span class="skill-tag"><span>S3</span></span>
+                        <span class="skill-tag"><span>RDS</span></span>
+                        <span class="skill-tag"><span>Auto Scaling</span></span>
                     </div>
                 </div>
                 
                 <div class="skill-category">
                     <h3><i class="fas fa-server"></i> Operating Systems</h3>
                     <div class="skill-items">
-                        <span class="skill-tag">Linux</span>
-                        <span class="skill-tag">Windows Server</span>
-                        <span class="skill-tag">Active Directory</span>
-                        <span class="skill-tag">Nginx</span>
-                        <span class="skill-tag">Apache</span>
-                        <span class="skill-tag">SSH/CLI</span>
+                        <span class="skill-tag"><span>Linux</span></span>
+                        <span class="skill-tag"><span>Windows Server</span></span>
+                        <span class="skill-tag"><span>Active Directory</span></span>
+                        <span class="skill-tag"><span>Nginx</span></span>
+                        <span class="skill-tag"><span>Apache</span></span>
+                        <span class="skill-tag"><span>SSH/CLI</span></span>
                     </div>
                 </div>
                 
                 <div class="skill-category">
                     <h3><i class="fas fa-network-wired"></i> Networking & Security</h3>
                     <div class="skill-items">
-                        <span class="skill-tag">DNS Configuration</span>
-                        <span class="skill-tag">SSL/TLS</span>
-                        <span class="skill-tag">Cloudflare</span>
-                        <span class="skill-tag">Load Balancing</span>
-                        <span class="skill-tag">Security Groups</span>
-                        <span class="skill-tag">IAM</span>
+                        <span class="skill-tag"><span>DNS Configuration</span></span>
+                        <span class="skill-tag"><span>SSL/TLS</span></span>
+                        <span class="skill-tag"><span>Cloudflare</span></span>
+                        <span class="skill-tag"><span>Load Balancing</span></span>
+                        <span class="skill-tag"><span>Security Groups</span></span>
+                        <span class="skill-tag"><span>IAM</span></span>
                     </div>
                 </div>
 
                 <div class="skill-category">
                     <h3><i class="fas fa-briefcase"></i> Enterprise Tools</h3>
                     <div class="skill-items">
-                        <span class="skill-tag">Microsoft 365</span>
-                        <span class="skill-tag">Google Workspace</span>
-                        <span class="skill-tag">AWS CLI</span>
-                        <span class="skill-tag">Git/GitHub</span>
-                        <span class="skill-tag">CI/CD (GitHub Actions)</span>
+                        <span class="skill-tag"><span>Microsoft 365</span></span>
+                        <span class="skill-tag"><span>Google Workspace</span></span>
+                        <span class="skill-tag"><span>AWS CLI</span></span>
+                        <span class="skill-tag"><span>Git/GitHub</span></span>
+                        <span class="skill-tag"><span>CI/CD (GitHub Actions)</span></span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Infrastructure Section (NEW) -->
+    <!-- Documentation Section -->
+    <section id="documentation" class="documentation">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Documentation</span>
+                <h2 class="section-title">Project Documentation</h2>
+                <p class="section-subtitle">Step-by-step guides with screenshots</p>
+            </div>
+            
+            <div class="docs-grid" id="docsGrid">
+                <!-- Documentation cards injected via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Infrastructure Section (MOVED TO LAST) -->
     <section id="infrastructure" class="infrastructure">
         <div class="container">
             <div class="section-header">
@@ -276,82 +294,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Documentation Section (NEW - for PDFs) -->
-    <section id="documentation" class="documentation">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Documentation</span>
-                <h2 class="section-title">Project Documentation</h2>
-                <p class="section-subtitle">Step-by-step guides with screenshots</p>
-            </div>
-            
-            <div class="docs-grid" id="docsGrid">
-                <!-- Documentation cards injected via JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Contact</span>
-                <h2 class="section-title">Let's Work Together</h2>
-            </div>
-            
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h3>Email</h3>
-                            <a href="mailto:muhammedanshad2005@gmail.com">muhammedanshad2005@gmail.com</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <div>
-                            <h3>Phone</h3>
-                            <a href="tel:+918589810735">+91 8589810735</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h3>Location</h3>
-                            <p>Tirur, Kerala, India</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-briefcase"></i>
-                        <div>
-                            <h3>Availability</h3>
-                            <p>Open to Internships & Entry-Level Roles</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <input type="text" id="name" required placeholder=" ">
-                        <label for="name">Your Name</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" required placeholder=" ">
-                        <label for="email">Your Email</label>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" rows="5" required placeholder=" "></textarea>
-                        <label for="message">Your Message</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <i class="fas fa-paper-plane"></i> Send Message
-                    </button>
-                </form>
             </div>
         </div>
     </section>
